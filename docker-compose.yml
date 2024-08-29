@@ -1,0 +1,68 @@
+﻿version: '3.7'
+
+services:
+  go-gin-example-api:
+    image: go-gin-example-api
+    container_name: go-gin-example-api
+    restart: always
+    build:
+      context: .
+      dockerfile: cmd/app/Dockerfile
+    ports:
+      - "3001:8080"    
+    depends_on:
+      - postgres
+      - elasticsearch
+      - kibana
+    environment:
+      - POSTGRES_HOST=postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=go-gin-example
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
+    container_name: elasticsearch
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - xpack.security.enabled=true
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.16.1
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_USERNAME=${ELASTIC_USERNAME}
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+      - SERVER_NAME=kibana
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - KIBANA_USERNAME=${KIBANA_USERNAME}
+      - KIBANA_PASSWORD=${KIBANA_PASSWORD}
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+  
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command:
+      - redis-server
