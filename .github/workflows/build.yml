@@ -16,11 +16,23 @@ jobs:
         uses: actions/checkout@v2
 
       # Set up Go
-      - name: Set up Go
-        uses: actions/setup-go@v4
+      - name: Set up Go 1.22.x
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.20
+          go-version: 1.22.x
+          
+      # Display Go version
+      - name: Display Go version
+        run: go version
 
-      # Install dependencies
-      - name: Install dependencies
-        run: go mod download
+      # Verify dependencies
+      - name: Verify dependencies
+        run: go mod verify
+      
+      # Build
+      - name: Build
+        run: go build -v ./cmd/app
+        
+      # Test
+      - name: Test
+        run: go test -v ./...
