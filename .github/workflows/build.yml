@@ -25,9 +25,9 @@ jobs:
       - name: Display Go version
         run: go version
 
-      # Install dependencies
-      - name: Install dependencies
-        run: go get .
+      # Verify dependencies
+      - name: Verify dependencies
+        run: go mod verify
       
       # Build
       - name: Build
