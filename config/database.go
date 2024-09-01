@@ -14,7 +14,11 @@ func ConnectDB(appConfig *AppConfig) (*gorm.DB, error) {
 		return nil, gormErr
 	}
 
-	migrationErr := database.AutoMigrate(&entity.User{})
+	migrationErr := database.AutoMigrate(
+		&entity.User{},
+		&entity.Permission{},
+		&entity.UserPermission{},
+	)
 	if migrationErr != nil {
 		log.Fatal("Error migrating the database: ", migrationErr)
 		return nil, migrationErr

@@ -1,5 +1,7 @@
 package constant
 
 const (
-	UserTableName = "users"
+	UserTableName           = "Users"
+	UserPermissionTableName = "UserPermissions"
+	PermissionTableName     = "Permissions"
 )
