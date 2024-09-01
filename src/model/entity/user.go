@@ -6,11 +6,13 @@ import (
 )
 
 type User struct {
-	Id       int       `gorm:"primaryKey autoIncrement column:id not null" json:"id"`
-	Name     string    `gorm:"column:name not null" json:"name"`
-	Email    string    `gorm:"column:email not null" json:"email"`
-	Password string    `gorm:"column:password not null" json:"password"`
-	CreateAt time.Time `gorm:"column:createAt not null" json:"createAt"`
+	Id              int              `gorm:"primaryKey autoIncrement column:id not null type:int" json:"id"`
+	Name            string           `gorm:"column:name not null type:varchar(120)" json:"name"`
+	Surname         string           `gorm:"column:surname not null type:varchar(120)" json:"surname"`
+	Email           string           `gorm:"column:email not null type:varchar(240)" json:"email"`
+	Password        string           `gorm:"column:password not null type:varchar(400)" json:"password"`
+	CreateAt        time.Time        `gorm:"column:createAt not null type:timestamp" json:"createAt"`
+	UserPermissions []UserPermission `gorm:"foreignKey:UserId" json:"userPermissions"`
 }
 
 func (User) TableName() string {
