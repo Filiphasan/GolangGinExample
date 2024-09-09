@@ -2,6 +2,7 @@ package config
 
 import (
 	"go-gin-example/src/model/entity"
+	"go-gin-example/src/seed"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -23,6 +24,8 @@ func ConnectDB(appConfig *AppConfig) (*gorm.DB, error) {
 		log.Fatal("Error migrating the database: ", migrationErr)
 		return nil, migrationErr
 	}
+
+	seed.CreateBasePermissions(database)
 
 	return database, nil
 }
